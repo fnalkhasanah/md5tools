@@ -6,7 +6,7 @@
   }
 
   body {
-    @apply grid place-items-start min-w-[320px] min-h-[100dvh] relative m-0 bg-background text-foreground;
+    @apply min-w-[320px] min-h-[100dvh] relative m-0 bg-background text-foreground;
   }
 }
 
