@@ -1,4 +1,0 @@
-{
-  "/api/md5/reverse/[hash]/route": "app/api/md5/reverse/[hash]/route.js",
-  "/api-tester/page": "app/api-tester/page.js"
-}
