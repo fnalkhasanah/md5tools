@@ -139,11 +139,11 @@ export default function MD5Tool() {
   );
 
   return (
-    <div className="min-h-[100dvh]">
+    <div className="flex min-h-[100dvh] flex-col">
       <TopBar />
-      <div className="mx-auto max-w-[1100px] px-5 pb-24 md:px-8">
-        <header className="pt-10 pb-8 md:pt-16">
-          <h1 className="font-mono text-3xl font-semibold tracking-tight md:text-5xl">
+      <div className="mx-auto flex w-full max-w-[1100px] flex-1 flex-col px-5 pb-6 md:px-8">
+        <header className="pt-6 pb-4 md:pt-8">
+          <h1 className="font-mono text-3xl font-semibold tracking-tight md:text-4xl">
             Hash, crack, compare.
           </h1>
           <p className="mt-3 max-w-[65ch] text-sm text-muted-foreground md:text-base">
@@ -151,9 +151,9 @@ export default function MD5Tool() {
           </p>
         </header>
 
-        <div className="grid gap-4 md:auto-rows-fr md:grid-cols-3">
+        <div className="grid flex-1 grid-cols-1 gap-4 md:auto-rows-fr md:grid-cols-3">
           {/* Hero cell: reverse lookup, 2x2 */}
-          <section className="tile-grid overflow-hidden rounded-lg border border-border bg-popover p-6 md:col-span-2 md:row-span-2">
+          <section className="tile-grid overflow-hidden rounded-lg border border-border bg-popover p-5 md:col-span-2 md:row-span-2">
             <div className="flex h-full flex-col">
               <h2 className="font-mono text-sm font-medium text-foreground">
                 Reverse MD5 lookup
@@ -190,7 +190,7 @@ export default function MD5Tool() {
                 </div>
               </div>
 
-              <div className="mt-6 min-h-[88px] flex-1">
+              <div className="mt-5 min-h-[64px] flex-1">
                 {lookupLoading && (
                   <div className="space-y-3">
                     <div className="shimmer h-4 w-32 rounded" />
@@ -249,7 +249,7 @@ export default function MD5Tool() {
           </section>
 
           {/* Text to MD5 */}
-          <section className="flex flex-col rounded-lg border border-border bg-card p-6">
+          <section className="flex flex-col rounded-lg border border-border bg-card p-5">
             <h2 className="font-mono text-sm font-medium text-foreground">
               Text to MD5
             </h2>
@@ -265,7 +265,7 @@ export default function MD5Tool() {
                 placeholder="Type or paste text here."
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
-                className="min-h-[96px] resize-y"
+                className="min-h-[64px] resize-y"
               />
             </div>
             <div className="mt-4">
@@ -280,7 +280,7 @@ export default function MD5Tool() {
           </section>
 
           {/* File to MD5 */}
-          <section className="flex flex-col rounded-lg border border-border bg-card p-6">
+          <section className="flex flex-col rounded-lg border border-border bg-card p-5">
             <h2 className="font-mono text-sm font-medium text-foreground">
               File to MD5
             </h2>
@@ -304,7 +304,7 @@ export default function MD5Tool() {
               onDragLeave={() => setDragging(false)}
               onDrop={onDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="mt-4 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border px-4 py-7 text-center transition-colors hover:border-primary/60 hover:bg-accent/40"
+              className="mt-4 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border px-4 py-5 text-center transition-colors hover:border-primary/60 hover:bg-accent/40"
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -345,7 +345,7 @@ export default function MD5Tool() {
           </section>
 
           {/* Compare hashes, full width */}
-          <section className="rounded-lg border border-border bg-card p-6 md:col-span-3">
+          <section className="rounded-lg border border-border bg-card p-5 md:col-span-3">
             <div className="flex flex-col gap-6 md:flex-row md:items-start">
               <div className="md:w-1/3">
                 <h2 className="font-mono text-sm font-medium text-foreground">
