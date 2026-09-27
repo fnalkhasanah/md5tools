@@ -11,16 +11,24 @@ export async function GET(
     return NextResponse.json({ error: "Invalid MD5 hash" }, { status: 400 });
   }
 
-  const sites = [
+  // Fallback chain, cheapest first. hashes.com covers the largest wordlist but
+  // needs a free API key; skipped entirely when unset (its keyless response is
+  // an error JSON, which the verification pass safely rejects).
+  const sites: string[] = [];
+  if (process.env.HASHES_COM_API_KEY) {
+    sites.push(
+      `https://hashes.com/en/api/search?hash=${hash}&key=${process.env.HASHES_COM_API_KEY}`
+    );
+  }
+  sites.push(
     `https://md5.gromweb.com/?md5=${hash}`,
-    `https://md5decrypt.net/en/?hash=${hash}`,
-    `http://www.nitrxgen.net/md5db/${hash}.txt`,
-  ];
+    `https://md5decrypt.net/en/?hash=${hash}`
+  );
 
   for (const siteUrl of sites) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 50000);
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
 
       const res = await fetch(siteUrl, {
         headers: { "User-Agent": "MD5-Tool-Proxy/2026" },
@@ -40,17 +48,6 @@ export async function GET(
         )
       ) {
         continue;
-      }
-
-      if (siteUrl.includes("nitrxgen") && text.length < 120) {
-        const plaintext = text.trim();
-        if (plaintext) {
-          return NextResponse.json({
-            success: true,
-            plaintext,
-            source: "nitrxgen",
-          });
-        }
       }
 
       if (siteUrl.includes("gromweb") && text.includes("The MD5 hash")) {
