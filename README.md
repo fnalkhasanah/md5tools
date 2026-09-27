@@ -1,69 +1,67 @@
-# MD5 Tools - Next.js
+# md5.tools
 
-A modern MD5 hashing and reverse lookup tool built with Next.js, React, and Tailwind CSS.
+An MD5 hashing and reverse-lookup tool built with Next.js 15, React 19, TypeScript, and Tailwind CSS.
 
 ## Getting Started
 
-### Installation
-
 ```bash
 npm install
-```
-
-### Development
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
-
-### Production Build
-
-```bash
-npm run build
-npm start
-```
+Open [http://localhost:3000](http://localhost:3000).
 
 ## Features
 
-- **Text to MD5**: Generate MD5 hashes from any text input
-- **File to MD5**: Compute MD5 checksums for uploaded files
-- **MD5 Reverse Lookup**: Attempt to crack MD5 hashes using public rainbow table services
-- **Hash Comparison**: Compare two MD5 hashes for equality
+- **Reverse MD5 lookup** - recover the plaintext behind an MD5 hash using public wordlist databases
+- **Text to MD5** - hash any text, live as you type
+- **File to MD5** - compute a file checksum, with drag-and-drop
+- **Hash comparison** - check whether two hashes match, case-insensitive
+
+## API
+
+### `GET /api/md5/reverse/[hash]`
+
+Cracks an MD5 hash against several public sources, in order:
+
+1. `hashes.com` (only when `HASHES_COM_API_KEY` is set)
+2. `binsec.tools`
+3. `md5.gromweb.com`
+4. `md5decrypt.net`
+
+Every candidate scraped from a source is re-hashed and compared to the query hash
+before it is returned, so a source can only ever produce a verified hit.
+
+```jsonc
+// GET /api/md5/reverse/5f4dcc3b5aa765d61d8327deb882cf99
+{ "success": true, "plaintext": "password", "source": "gromweb" }
+
+// GET /api/md5/reverse/00000000000000000000000000000000
+{ "success": false, "plaintext": null, "message": "Plaintext not found in available databases" }
+```
+
+Returns `400` when `[hash]` is not a valid 32-character hex string.
+
+### Optional: hashes.com API key
+
+Sign up at [hashes.com](https://hashes.com) for a free API key, then add it to
+`.env.local`:
+
+```
+HASHES_COM_API_KEY=your-key-here
+```
+
+Without the key, hashes.com is skipped entirely and the remaining sources are used.
+
+## Pages
+
+- `/` - the MD5 tool (reverse lookup, text and file hashing, comparison)
+- `/api-tester` - interactive playground for the reverse-lookup API
 
 ## Technology Stack
 
-- Next.js 15 (React framework with App Router)
+- Next.js 15 (App Router + Pages Router)
 - React 19
 - TypeScript
 - Tailwind CSS
-- shadcn/ui Components
-
-## Migration from Bun to Next.js
-
-This project has been successfully refactored from a Bun-based setup to Next.js.
-
-### Cleanup Old Bun Files
-
-To remove Bun-specific files, run:
-
-```bash
-bash cleanup.sh
-```
-
-Or manually delete:
-- `build.ts` - Bun build script
-- `bunfig.toml` - Bun configuration
-- `bun-env.d.ts` - Bun type definitions
-- `bun.lock` - Bun lock file
-- `src/index.ts` - Old Bun entry point
-- `src/routes.tsx` - React Router (no longer needed)
-- `src/frontend.tsx` - Old browser entry point
-- `src/index.html` - Old HTML template
-- `src/App.tsx` - Old App componen
-
-## Deployment
-
-Ready to deploy to Vercel, Netlify, or any Node.js hosting.
-
+- shadcn/ui components
